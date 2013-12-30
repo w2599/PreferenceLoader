@@ -82,7 +82,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			[_loadedSpecifiers addObjectsFromArray:specs];
 		}
 
-		[_loadedSpecifiers sortUsingFunction:&PSSpecifierSort context:NULL];
+		[_loadedSpecifiers sortUsingFunction:(NSInteger (*)(id, id, void *))&PSSpecifierSort context:NULL];
 
 		if([_loadedSpecifiers count] > 0) {
 			PLLog(@"so we gots us some specifiers! that's awesome! let's add them to the list...");
