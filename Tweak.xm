@@ -123,7 +123,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 	%init(PrefsListController = targetRootClass);
 
 	_Firmware_lt_60 = kCFCoreFoundationVersionNumber < 793.00;
-	if([UIDevice instancesRespondToSelector:@selector(isWildcat)] && [[UIDevice currentDevice] isWildcat])
+	if(([UIDevice instancesRespondToSelector:@selector(isWildcat)] && [[UIDevice currentDevice] isWildcat]) || (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad))
 		%init(iPad);
 
 	void *preferencesHandle = dlopen("/System/Library/PrivateFrameworks/Preferences.framework/Preferences", RTLD_LAZY | RTLD_NOLOAD);
