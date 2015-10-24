@@ -116,7 +116,11 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 %end
 
 %ctor {
-	%init();
+	Class targetRootClass = objc_getClass("PSUIPrefsListController");
+	if (targetRootClass == Nil) {
+		targetRootClass = objc_getClass("PrefsListController");
+	}
+	%init(PrefsListController = targetRootClass);
 
 	_Firmware_lt_60 = kCFCoreFoundationVersionNumber < 793.00;
 	if([UIDevice instancesRespondToSelector:@selector(isWildcat)] && [[UIDevice currentDevice] isWildcat])
