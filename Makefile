@@ -1,38 +1,16 @@
-IPHONE_ARCHS = armv6 armv7 arm64
+IPHONE_ARCHS = arm64
 
-SDKVERSION_armv6 = 5.1
-TARGET_IPHONEOS_DEPLOYMENT_VERSION = 3.0
-TARGET_IPHONEOS_DEPLOYMENT_VERSION_armv6 = 2.0
-THEOS_PLATFORM_SDK_ROOT_armv6 = /Applications/Xcode_Legacy.app/Contents/Developer
-
-include framework/makefiles/common.mk
-
-LIBRARY_NAME = libprefs
-libprefs_LOGOSFLAGS = -c generator=internal
-libprefs_FILES = prefs.xm
-libprefs_FRAMEWORKS = UIKit
-libprefs_PRIVATE_FRAMEWORKS = Preferences
-libprefs_CFLAGS = -I.
-libprefs_COMPATIBILITY_VERSION = 2.2.0
-libprefs_LIBRARY_VERSION = $(shell echo "$(THEOS_PACKAGE_BASE_VERSION)" | cut -d'~' -f1)
-libprefs_LDFLAGS  = -compatibility_version $($(THEOS_CURRENT_INSTANCE)_COMPATIBILITY_VERSION)
-libprefs_LDFLAGS += -current_version $($(THEOS_CURRENT_INSTANCE)_LIBRARY_VERSION)
-libprefs_IPHONE_ARCHS = armv6 armv7 armv7s arm64
+include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = PreferenceLoader
-PreferenceLoader_FILES = Tweak.xm
+PreferenceLoader_FILES = Tweak.xm prefs.xm
 PreferenceLoader_FRAMEWORKS = UIKit
 PreferenceLoader_PRIVATE_FRAMEWORKS = Preferences
-PreferenceLoader_LIBRARIES = prefs
 PreferenceLoader_CFLAGS = -I.
-PreferenceLoader_LDFLAGS = -L$(THEOS_OBJ_DIR)
+PreferenceLoader_USE_SUBSTRATE=0
 
 include $(THEOS_MAKE_PATH)/library.mk
 include $(THEOS_MAKE_PATH)/tweak.mk
-
-after-libprefs-stage::
-	$(ECHO_NOTHING)mkdir -p $(THEOS_STAGING_DIR)/usr/include/libprefs$(ECHO_END)
-	$(ECHO_NOTHING)cp prefs.h $(THEOS_STAGING_DIR)/usr/include/libprefs/prefs.h$(ECHO_END)
 
 after-stage::
 	find $(THEOS_STAGING_DIR) -iname '*.plist' -exec plutil -convert binary1 {} \;

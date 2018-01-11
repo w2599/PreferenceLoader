@@ -1,5 +1,6 @@
-#import <Preferences/Preferences.h>
-#import <substrate.h>
+#import <Preferences/PSListController.h>
+#import <Preferences/PSSpecifier.h>
+#import <dlfcn.h>
 
 #import "prefs.h"
 
@@ -48,17 +49,17 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 }
 
 - (id)specifiers {
-	bool first = (MSHookIvar<id>(self, "_specifiers") == nil);
+	bool first = ([self valueForKey:@"_specifiers"] == nil);
 	if(first) {
 		PLLog(@"initial invocation for -specifiers");
 		%orig;
 		[_loadedSpecifiers release];
 		_loadedSpecifiers = [[NSMutableArray alloc] init];
-		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:@"/Library/PreferenceLoader/Preferences" error:NULL];
+		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:@"/bootstrap/Library/PreferenceLoader/Preferences" error:NULL];
 		for(NSString *item in subpaths) {
 			if(![[item pathExtension] isEqualToString:@"plist"]) continue;
 			PLLog(@"processing %@", item);
-			NSString *fullPath = [NSString stringWithFormat:@"/Library/PreferenceLoader/Preferences/%@", item];
+			NSString *fullPath = [NSString stringWithFormat:@"/bootstrap/Library/PreferenceLoader/Preferences/%@", item];
 			NSDictionary *plPlist = [NSDictionary dictionaryWithContentsOfFile:fullPath];
 			if(![PSSpecifier environmentPassesPreferenceLoaderFilter:[plPlist objectForKey:@"filter"] ?: [plPlist objectForKey:PLFilterKey]]) continue;
 
@@ -88,7 +89,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			PLLog(@"so we gots us some specifiers! that's awesome! let's add them to the list...");
 			PSSpecifier *groupSpecifier = [PSSpecifier groupSpecifierWithName:_Firmware_lt_60 ? @"Extensions" : nil];
 			[_loadedSpecifiers insertObject:groupSpecifier atIndex:0];
-			NSMutableArray *_specifiers = MSHookIvar<NSMutableArray *>(self, "_specifiers");
+			NSMutableArray *_specifiers = [self valueForKey:@"_specifiers"];
 			NSInteger group, row;
 			NSInteger firstindex;
 			if ([self getGroup:&group row:&row ofSpecifierID:_Firmware_lt_60 ? @"General" : @"TWITTER"]) {
@@ -103,7 +104,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			PLLog(@"getting group index");
 			NSUInteger groupIndex = 0;
 			for(PSSpecifier *spec in _specifiers) {
-				if(MSHookIvar<NSInteger>(spec, "cellType") != PSGroupCell) continue;
+				if ([[spec valueForKey:@"cellType"] integerValue] != PSGroupCell) continue;
 				if(spec == groupSpecifier) break;
 				++groupIndex;
 			}
@@ -111,7 +112,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			PLLog(@"group index is %d", _extraPrefsGroupSectionID);
 		}
 	}
-	return MSHookIvar<id>(self, "_specifiers");
+	return [self valueForKey:@"_specifiers"];
 }
 %end
 
