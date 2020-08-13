@@ -1,4 +1,5 @@
-#import <Preferences/Preferences.h>
+#import <Preferences/PSSpecifier.h>
+#import <Preferences/PSListController.h>
 #import <substrate.h>
 
 #import "prefs.h"
