@@ -48,16 +48,6 @@ static NSString **pPSStaticTextGroupKey = NULL;
 static NSArray *generateErrorSpecifiersWithText(NSString *errorText);
 /* }}} */
 
-/* {{{ Constants */
-static NSString *const PLBundleKey = @"pl_bundle";
-NSString *const PLFilterKey = @"pl_filter";
-static NSString *const PLAlternatePlistNameKey = @"pl_alt_plist_name";
-/* }}} */
-
-/* {{{ Locals */
-static BOOL _Firmware_lt_60 = NO;
-/* }}} */
-
 /* {{{ Preferences Controllers */
 @implementation PLCustomListController
 - (id)bundle {
@@ -246,21 +236,10 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 	[bundlePath release];
 }
 
-%group Firmware_lt_60
-%hook PrefsRootController
-- (void)lazyLoadBundle:(PSSpecifier *)specifier {
-	pl_lazyLoadBundleCore(self, _cmd, specifier, (void(*)(id, SEL, PSSpecifier *))&%orig);
-
-}
-%end
-%end
-
 %hook PSListController
-%group Firmware_ge_60
 - (void)lazyLoadBundle:(PSSpecifier *)specifier {
 	pl_lazyLoadBundleCore(self, _cmd, specifier, (void(*)(id, SEL, PSSpecifier *))&%orig);
 }
-%end
 
 %new
 - (PSViewController *)controllerForSpecifier:(PSSpecifier *)specifier
@@ -364,7 +343,7 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 
 	PLLog(@"loading specifiers!");
 	NSMutableArray *&bundleControllers = MSHookIvar<NSMutableArray *>(self, "_bundleControllers");
-	NSArray *specs = SpecifiersFromPlist(specifierPlist, nil, _Firmware_lt_60 ? [self rootController] : self, title, prefBundle, NULL, NULL, (PSListController*)self, &bundleControllers);
+	NSArray *specs = SpecifiersFromPlist(specifierPlist, nil, self, title, prefBundle, NULL, NULL, (PSListController*)self, &bundleControllers);
 	PLLog(@"loaded specifiers!");
 
 	if([specs count] == 0) return nil;
@@ -401,14 +380,7 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 @end
 
 %ctor {
-	_Firmware_lt_60 = kCFCoreFoundationVersionNumber < 793.00;
 	%init;
-
-	if(_Firmware_lt_60) {
-		%init(Firmware_lt_60);
-	} else {
-		%init(Firmware_ge_60);
-	}
 
 	void *preferencesHandle = dlopen("/System/Library/PrivateFrameworks/Preferences.framework/Preferences", RTLD_LAZY | RTLD_NOLOAD);
 	if(preferencesHandle) {

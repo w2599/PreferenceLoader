@@ -1,11 +1,15 @@
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSListController.h>
 
+/* {{{ Constants */
+#define PLBundleKey @"pl_bundle"
+#define PLFilterKey @"pl_filter"
+#define PLAlternatePlistNameKey @"pl_alt_plist_name"
+/* }}} */
+
 @interface PSListController (libprefs)
 - (NSArray *)specifiersFromEntry:(NSDictionary *)entry sourcePreferenceLoaderBundlePath:(NSString *)sourceBundlePath title:(NSString *)title;
 @end
-
-extern NSString *const PLFilterKey;
 
 @interface PSSpecifier (libprefs)
 + (BOOL)environmentPassesPreferenceLoaderFilter:(NSDictionary *)filter;
