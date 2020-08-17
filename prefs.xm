@@ -266,30 +266,6 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 	}
 	return [result autorelease];
 }
-
-- (NSArray *)loadSpecifiersFromPlistName:(NSString *)plistName target:(id)target {
-	NSArray *result = %orig();
-	if([result count] > 0)
-		return result;
-
-	NSDictionary *properties = self.specifier.properties;
-	if(!properties)
-		return nil;
-
-	PLLog(@"Loading specifiers from PSListController's specifier's properties.");
-	NSMutableArray *&bundleControllers = MSHookIvar<NSMutableArray *>(self, "_bundleControllers");
-	NSString *title = nil;
-	NSString *specifierID = nil;
-	result = SpecifiersFromPlist(properties, [self specifier], target, plistName, [self bundle], &title, &specifierID, self, &bundleControllers);
-
-	if(title)
-		[self setTitle:title];
-
-	if(specifierID)
-		[self setSpecifierID:specifierID];
-
-	return result;
-}
 %end
 
 %hook NSBundle
