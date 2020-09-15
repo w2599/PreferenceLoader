@@ -20,6 +20,8 @@ extern "C" NSArray* SpecifiersFromPlist(NSDictionary* plist,
 					PSListController* callerList,
 					NSMutableArray** pBundleControllers);
 
+NSString *const PLFilterKey = @"pl_filter";
+
 
 extern NSString *const PSBundlePathKey;
 extern NSString *const PSLazilyLoadedBundleKey;

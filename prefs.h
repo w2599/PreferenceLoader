@@ -3,7 +3,7 @@
 
 /* {{{ Constants */
 #define PLBundleKey @"pl_bundle"
-#define PLFilterKey @"pl_filter"
+extern NSString *const PLFilterKey;
 #define PLAlternatePlistNameKey @"pl_alt_plist_name"
 /* }}} */
 
