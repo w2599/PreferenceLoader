@@ -276,10 +276,8 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 		result = [result initForContentSize:[[self view] bounds].size];
 	else
 		result = [result init];
-	if ([result respondsToSelector:@selector(setRootController:)])
-		[result setRootController:self.rootController];
-	if ([result respondsToSelector:@selector(setParentController:)])
-		[result setParentController:self];
+	[result setRootController:self.rootController];
+	[result setParentController:self];
 	if ([result respondsToSelector:@selector(setSpecifier:)])
 		[result setSpecifier:specifier];
 	else if ([result isKindOfClass:[PSListController class]]) {
