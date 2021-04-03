@@ -3,6 +3,7 @@
 #import <Preferences/PSBundleController.h>
 #import <Preferences/PSTableCell.h>
 #import <substrate.h>
+#import <dlfcn.h>
 
 #import "prefs.h"
 
@@ -246,7 +247,6 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 %new
 - (PSViewController *)controllerForSpecifier:(PSSpecifier *)specifier
 {
-	%log();
 	Class detailClass = [specifier respondsToSelector:@selector(detailControllerClass)] ? [specifier detailControllerClass] : MSHookIvar<Class>(specifier, "detailControllerClass");
 	if (!detailClass)
 		detailClass = [PLCustomListController class];
