@@ -277,7 +277,7 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 	NSString *newPath = nil;
 	NSRange sysRange = [path rangeOfString:@"/System/Library/PreferenceBundles" options:0];
 	if(sysRange.location != NSNotFound) {
-		newPath = [path stringByReplacingCharactersInRange:sysRange withString:@"/Library/PreferenceBundles"];
+		newPath = [path stringByReplacingCharactersInRange:sysRange withString:@"/var/jb/Library/PreferenceBundles"];
 	}
 	if(newPath && [[NSFileManager defaultManager] fileExistsAtPath:newPath]) {
 		// /Library/PreferenceBundles will override /System/Library/PreferenceBundles.
@@ -303,7 +303,7 @@ static void pl_lazyLoadBundleCore(id self, SEL _cmd, PSSpecifier *specifier, voi
 	if(isBundle) {
 		// Second Try (bundlePath key failed)
 		if(![[NSFileManager defaultManager] fileExistsAtPath:bundlePath])
-			bundlePath = [NSString stringWithFormat:@"/Library/PreferenceBundles/%@.bundle", bundleName];
+			bundlePath = [NSString stringWithFormat:@"/var/jb/Library/PreferenceBundles/%@.bundle", bundleName];
 
 		// Third Try (/Library failed)
 		if(![[NSFileManager defaultManager] fileExistsAtPath:bundlePath])
