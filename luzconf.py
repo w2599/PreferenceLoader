@@ -14,8 +14,8 @@ meta = Meta(
 
 # Define control metadata here
 control = Control(
-    name="PreferenceLoader - rootless",
-    id="preferenceloader.rootless",
+    name="PreferenceLoader - rootless (top)",
+    id="preferenceloader.rootless.top",
     version="2.2.6.5",
     author="Dustin Howett",
     maintainer="zp,Dustin Howett",
@@ -24,7 +24,7 @@ control = Control(
     architecture="iphoneos-arm64",
     replaces=["preferenceloader"],
     provides=["preferenceloader (= 2.2.6)"],
-    conflicts=["preferenceloader"]
+    conflicts=["preferenceloader","preferenceloader.rootless"]
 )
 
 install_dir = meta.root_dir.relative_to(meta.staging_dir)

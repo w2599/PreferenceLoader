@@ -68,7 +68,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			PSSpecifier *groupSpecifier = [PSSpecifier groupSpecifierWithName:nil];
 			[_loadedSpecifiers insertObject:groupSpecifier atIndex:0];
 			NSMutableArray *_specifiers = MSHookIvar<NSMutableArray *>(self, "_specifiers");
-			NSInteger firstindex = [_specifiers count];
+			NSInteger firstindex = 2;
 				
 			PLLog(@"Adding to the end of entire list");
 
