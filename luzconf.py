@@ -24,7 +24,7 @@ control = Control(
     architecture="iphoneos-arm64",
     replaces=["preferenceloader"],
     provides=["preferenceloader (= 2.2.6)"],
-    conflicts=["preferenceloader"]
+    conflicts=["preferenceloader","preferenceloader.rootless.top"]
 )
 
 install_dir = meta.root_dir.relative_to(meta.staging_dir)
