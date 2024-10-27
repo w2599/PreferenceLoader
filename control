@@ -1,13 +1,12 @@
-Package: preferenceloader
-Name: PreferenceLoader
-Depends: mobilesubstrate
-Version: 2.2.4~alpha1
-Architecture: iphoneos-arm
+Package: preferenceloader.rootless.top
 Description: load preferences in style
-Maintainer: Dustin Howett <cydia.pl@relay.howett.net>
-Author: Dustin Howett <cydia.pl@relay.howett.net>
+Version: 2.2.7
+Maintainer: zp,Dustin Howett
+Author: Dustin Howett
+Architecture: iphoneos-arm64
+Name: PreferenceLoader - rootless (top)
+Conflicts: preferenceloader, preferenceloader.rootless
+Replaces: preferenceloader
+Provides: preferenceloader (= 2.2.6)
 Section: System
-dev: dustinhowett
-Depiction: http://moreinfo.thebigboss.org/moreinfo/depiction.php?file=preferenceloader2Data
-Homepage: http://moreinfo.thebigboss.org/moreinfo/depiction.php?file=preferenceloader2Data
-Tag: role::hacker, purpose::library
+Installed-Size: 336

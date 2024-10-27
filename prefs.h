@@ -1,5 +1,6 @@
 #import <Preferences/PSSpecifier.h>
 #import <Preferences/PSListController.h>
+#import "rootless.h"
 
 /* {{{ Constants */
 #define PLBundleKey @"pl_bundle"

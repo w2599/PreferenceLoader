@@ -7,12 +7,13 @@
 #define DEBUG_TAG "PreferenceLoader"
 #import "debug.h"
 
-%hook PrefsListController
+
 static NSMutableArray *_loadedSpecifiers = nil;
 static NSInteger _extraPrefsGroupSectionID = 0;
 
-/* {{{ iPad Hooks */
 %group iPad
+%hook PrefsListController
+
 - (NSString *)tableView:(UITableView *)view titleForHeaderInSection:(NSInteger)section {
 	if([_loadedSpecifiers count] == 0) return %orig;
 	if(section == _extraPrefsGroupSectionID) return NULL;
@@ -25,6 +26,12 @@ static NSInteger _extraPrefsGroupSectionID = 0;
 	return %orig;
 }
 %end
+%end
+
+%hook PrefsListController
+
+/* {{{ iPad Hooks */
+
 /* }}} */
 
 static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context) {
@@ -40,11 +47,11 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 		%orig;
 		[_loadedSpecifiers release];
 		_loadedSpecifiers = [[NSMutableArray alloc] init];
-		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:@"/Library/PreferenceLoader/Preferences" error:NULL];
+		NSArray *subpaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:ROOT_PATH_NS(@"/Library/PreferenceLoader/Preferences") error:NULL];
 		for(NSString *item in subpaths) {
 			if(![[item pathExtension] isEqualToString:@"plist"]) continue;
 			PLLog(@"processing %@", item);
-			NSString *fullPath = [NSString stringWithFormat:@"/Library/PreferenceLoader/Preferences/%@", item];
+			NSString *fullPath = ROOT_PATH_NS([NSString stringWithFormat:@"/Library/PreferenceLoader/Preferences/%@", item]);
 			NSDictionary *plPlist = [NSDictionary dictionaryWithContentsOfFile:fullPath];
 			if(![PSSpecifier environmentPassesPreferenceLoaderFilter:[plPlist objectForKey:@"filter"] ?: [plPlist objectForKey:PLFilterKey]]) continue;
 
@@ -68,7 +75,7 @@ static NSInteger PSSpecifierSort(PSSpecifier *a1, PSSpecifier *a2, void *context
 			PSSpecifier *groupSpecifier = [PSSpecifier groupSpecifierWithName:nil];
 			[_loadedSpecifiers insertObject:groupSpecifier atIndex:0];
 			NSMutableArray *_specifiers = MSHookIvar<NSMutableArray *>(self, "_specifiers");
-			NSInteger firstindex = [_specifiers count];
+			NSInteger firstindex = 2;
 				
 			PLLog(@"Adding to the end of entire list");
 
